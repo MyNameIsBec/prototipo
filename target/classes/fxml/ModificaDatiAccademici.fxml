@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER" style="-fx-background-color: #f5f5f5;">
+
+    <VBox spacing="12" alignment="CENTER_LEFT" maxWidth="420" style="-fx-background-color: white; -fx-padding: 26; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+        <Label text="Modifica dati accademici" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+        <Label text="Aggiorna i tuoi dati accademici (corso, anno, istituzione)" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" />
+        <TextArea fx:id="datiAccademiciArea" promptText="Pianoforte · Conservatorio · A.A. 2025/26" prefRowCount="4" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" />
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding><Insets top="8" /></padding>
+            <Button text="Indietro" onAction="#handleIndietro" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
+            <Button text="SALVA" onAction="#handleSalva" style="-fx-font-size: 13px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
+        </HBox>
+    </VBox>
+</VBox>

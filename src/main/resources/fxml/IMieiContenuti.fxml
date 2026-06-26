@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      spacing="0" style="-fx-background-color: #f5f5f5;">
+
+    <!-- Sidebar -->
+    <VBox spacing="0" prefWidth="240" style="-fx-background-color: #1e293b; -fx-padding: 0;">
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 20 16;">
+            <ImageView fitWidth="36" fitHeight="36" preserveRatio="true">
+                <image><Image url="@/images/logo.png" backgroundLoading="true"/></image>
+            </ImageView>
+            <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
+        </HBox>
+        <Label text="Interfacce sempre disponibili" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8; -fx-padding: 0 16 12 16; -fx-underline: true;" />
+        <VBox spacing="0">
+            <Button onAction="#handleVaiAProfilo" style="-fx-background-color: transparent; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
+                <graphic><HBox spacing="11" alignment="CENTER_LEFT">
+                    <Label text="Profilo" style="-fx-font-size: 14px; -fx-text-fill: #cbd5e1;" />
+                </HBox></graphic>
+            </Button>
+            <Button style="-fx-background-color: #334155; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
+                <graphic><HBox spacing="11" alignment="CENTER_LEFT">
+                    <Label text="I miei contenuti" style="-fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;" />
+                </HBox></graphic>
+            </Button>
+            <Button onAction="#handleVaiACondivisioni" style="-fx-background-color: transparent; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
+                <graphic><HBox spacing="11" alignment="CENTER_LEFT">
+                    <Label text="Condivisioni" style="-fx-font-size: 14px; -fx-text-fill: #cbd5e1;" />
+                </HBox></graphic>
+            </Button>
+            <VBox prefHeight="1" style="-fx-background-color: #334155;" maxWidth="200">
+                <padding><Insets left="16" right="16"/></padding>
+            </VBox>
+            <Button onAction="#handleLogout" style="-fx-background-color: transparent; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
+                <graphic><HBox spacing="11" alignment="CENTER_LEFT">
+                    <Label text="Logout" style="-fx-font-size: 14px; -fx-text-fill: #ef4444;" />
+                </HBox></graphic>
+            </Button>
+        </VBox>
+    </VBox>
+
+    <!-- Main content -->
+    <VBox spacing="0" HBox.hgrow="ALWAYS" style="-fx-background-color: #f5f5f5;">
+        <padding><Insets top="22" right="26" bottom="22" left="26" /></padding>
+
+        <!-- Topbar toolbar -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox spacing="8" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+                <TextField fx:id="ricercaField" promptText="Cerca un documento..." style="-fx-padding: 8; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" HBox.hgrow="ALWAYS" />
+                <Button text="Filtra" onAction="#handleFiltra" style="-fx-font-size: 12px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 6 12;" />
+                <Button text="Cerca" onAction="#handleCerca" style="-fx-font-size: 12px; -fx-background-color: #6366f1; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 6 12;" />
+            </HBox>
+            <Button text="Nuova cartella" onAction="#handleNuovaCartella" style="-fx-font-size: 12px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 6 12;" />
+            <Button text="Carica contenuto" onAction="#handleCaricaContenuto" style="-fx-font-size: 12px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 6 12;" />
+        </HBox>
+
+        <!-- Cartelle -->
+        <Label text="Cartelle" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 20 0 8 0;" />
+        <FlowPane fx:id="cartellePane" hgap="14" vgap="14" />
+
+        <!-- Contenuti -->
+        <Label text="Contenuti" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 16 0 8 0;" />
+        <Label text="Il menu ⋮ di ogni contenuto dà accesso ai casi d'uso di gestione contenuti (modifica, modifica privacy, sposta, duplica, genera link, scarica, elimina)." wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8; -fx-font-style: italic;" />
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <FlowPane fx:id="contenutiPane" hgap="14" vgap="14" alignment="TOP_CENTER" />
+        </ScrollPane>
+    </VBox>
+</HBox>

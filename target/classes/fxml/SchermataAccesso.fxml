@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER" style="-fx-background-color: #f5f5f5;">
+
+    <VBox alignment="CENTER" spacing="16" maxWidth="420" style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+        <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+            <image><Image url="@/images/portfolio logo.png" backgroundLoading="true"/></image>
+        </ImageView>
+
+        <VBox alignment="CENTER" spacing="4">
+            <Label text="Bentornato" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label text="Accedi al tuo portfolio" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" />
+        </VBox>
+
+        <VBox spacing="10" maxWidth="400">
+            <Label text="Email" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <TextField fx:id="emailField" promptText="mario.rossi@studenti.afam.it" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="400" />
+            <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <PasswordField fx:id="passwordField" promptText="Inserisci la password" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="400" />
+
+            <Button text="RECUPERA PASSWORD" onAction="#handleRecuperaPassword" style="-fx-font-size: 12px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-underline: true; -fx-padding: 4 0;" maxWidth="400" />
+
+            <Button text="ACCEDI" onAction="#handleAccedi" style="-fx-font-size: 16px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 8; -fx-padding: 12; -fx-font-weight: bold;" maxWidth="400" />
+        </VBox>
+
+        <HBox alignment="CENTER" maxWidth="400">
+            <padding><Insets top="8" bottom="8" /></padding>
+            <HBox HBox.hgrow="ALWAYS" style="-fx-background-color: #e0e0e0; -fx-pref-height: 1;" />
+            <Label text=" oppure " style="-fx-font-size: 13px; -fx-text-fill: #999; -fx-padding: 0 12;" />
+            <HBox HBox.hgrow="ALWAYS" style="-fx-background-color: #e0e0e0; -fx-pref-height: 1;" />
+        </HBox>
+
+        <HBox spacing="10" maxWidth="400">
+            <Button text="Accedi con SPID" onAction="#handleAccediSPID" style="-fx-font-size: 13px; -fx-background-color: white; -fx-text-fill: #3498db; -fx-border-color: #3498db; -fx-border-radius: 6; -fx-padding: 10;" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            <Button text="Accedi con eIDAS" onAction="#handleAccediEIDAS" style="-fx-font-size: 13px; -fx-background-color: white; -fx-text-fill: #e67e22; -fx-border-color: #e67e22; -fx-border-radius: 6; -fx-padding: 10;" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+        </HBox>
+
+        <Hyperlink text="NON HAI ANCORA UN ACCOUNT? REGISTRATI ORA" onAction="#handleVaiARegistrazione"
+                   style="-fx-font-size: 12px; -fx-text-fill: #6366f1;" />
+    </VBox>
+</VBox>

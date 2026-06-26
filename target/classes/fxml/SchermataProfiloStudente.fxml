@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5;">
+
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 12 30; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
+        <Label text="← Indietro" onMouseClicked="#handleIndietro" style="-fx-font-size: 14px; -fx-text-fill: #6366f1; -fx-cursor: hand; -fx-underline: true;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+            <image><Image url="@/images/logo.png" backgroundLoading="true"/></image>
+        </ImageView>
+        <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;">
+        <VBox spacing="20" style="-fx-padding: 30;" maxWidth="700">
+            <Label fx:id="nomeStudenteLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label fx:id="datiAccademiciLabel" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" wrapText="true" />
+
+            <Label text="Cartelle pubbliche" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <FlowPane fx:id="cartellePane" hgap="15" vgap="15" />
+
+            <Label text="Contenuti" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label text="Clicca un contenuto per aprirlo. Il menu ⋮ permette di scaricarlo, valutarlo o inviarne una segnalazione (per scaricare o valutare è richiesta l'identificazione)." wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8; -fx-font-style: italic;" />
+            <FlowPane fx:id="contenutiPane" hgap="15" vgap="15" />
+        </VBox>
+    </ScrollPane>
+</VBox>
