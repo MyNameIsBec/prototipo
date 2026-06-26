@@ -77,8 +77,8 @@ public class App extends Application {
         authService = new AuthService(studenteRepository, amministratoreRepository);
         otpService = new OTPService();
         passwordResetService = new PasswordResetService(studenteRepository);
-        emailService = new EmailService("smtp.gmail.com", 587, "unimeet542@gmail.com",
-                "idhp ctnk eoos onzm", "unimeet542@gmail.com");
+        emailService = new EmailService(Config.getSmtpHost(), Config.getSmtpPort(),
+                Config.getSmtpUsername(), Config.getSmtpPassword(), Config.getSmtpFrom());
     }
 
     private void initCoreCtrls() {

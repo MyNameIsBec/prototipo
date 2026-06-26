@@ -1,0 +1,8 @@
+Portfolio AFAM.zip
+target/
+.idea/
+.vscode/
+*.class
+*.log
+*.tmp
+config.properties
