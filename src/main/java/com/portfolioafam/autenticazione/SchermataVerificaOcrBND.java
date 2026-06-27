@@ -66,16 +66,29 @@ public class SchermataVerificaOcrBND {
             }
             statoLabel.setText("Elaborazione in corso...");
             statoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #6366f1;");
-            boolean ok = verificaOcrCtrl.verificaTessera(fronteData,
-                studentePending.getCf(), studentePending.getNome(), studentePending.getCognome());
-            if (ok) {
+            String testoFronte = verificaOcrCtrl.estraiTesto(fronteData);
+            String testoRetro = retroData != null ? verificaOcrCtrl.estraiTesto(retroData) : "";
+            String testoCompleto = (testoFronte + " " + testoRetro).toUpperCase();
+            String cf = studentePending.getCf().toUpperCase();
+            String nome = studentePending.getNome().toUpperCase();
+            String cognome = studentePending.getCognome().toUpperCase();
+            boolean cfOK = testoCompleto.contains(cf);
+            boolean nomeOK = testoCompleto.contains(nome);
+            boolean cognomeOK = testoCompleto.contains(cognome);
+            if (cfOK && nomeOK && cognomeOK) {
                 statoLabel.setText("");
                 AlertUtils.mostraMessaggio("Verifica OCR", "Verifica riuscita");
                 SceneManager.switchTo("FormPassword");
             } else {
+                StringBuilder dettagli = new StringBuilder("Testo OCR:\n" + testoFronte);
+                if (testoRetro.length() > 0) dettagli.append("\n--- retro ---\n").append(testoRetro);
+                dettagli.append("\n\nRisultati:\n");
+                dettagli.append("CF \"" + cf + "\" " + (cfOK ? "OK" : "NON TROVATO") + "\n");
+                dettagli.append("Nome \"" + nome + "\" " + (nomeOK ? "OK" : "NON TROVATO") + "\n");
+                dettagli.append("Cognome \"" + cognome + "\" " + (cognomeOK ? "OK" : "NON TROVATO"));
                 statoLabel.setText("Verifica fallita: i dati non corrispondono");
                 statoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ef4444;");
-                AlertUtils.mostraErrore("Verifica OCR", "I dati estratti non corrispondono a quelli inseriti");
+                AlertUtils.mostraErrore("Verifica OCR", dettagli.toString());
             }
         } catch (Exception e) {
             statoLabel.setText("Errore OCR: " + e.getMessage());
