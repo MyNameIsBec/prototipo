@@ -2,6 +2,12 @@ package com.portfolioafam.util;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,10 +37,14 @@ public class OCRUtil {
     private OCRUtil() {
     }
 
-    public static String estraiTesto(byte[] imageData) throws IOException, TesseractException {
-        File temp = File.createTempFile("ocr_", ".png");
+    public static String estraiTesto(byte[] dati) throws IOException, TesseractException {
+        if (isPdf(dati)) {
+            return ocrPdf(dati);
+        }
+        String ext = guessExtension(dati);
+        File temp = File.createTempFile("ocr_", ext);
         try {
-            Files.write(temp.toPath(), imageData);
+            Files.write(temp.toPath(), dati);
             return tesseract.doOCR(temp);
         } finally {
             temp.delete();
@@ -47,5 +57,31 @@ public class OCRUtil {
         boolean nomeOK = nomeAtteso != null && testo.contains(nomeAtteso.toUpperCase());
         boolean cognomeOK = cognomeAtteso != null && testo.contains(cognomeAtteso.toUpperCase());
         return cfOK && nomeOK && cognomeOK;
+    }
+
+    private static boolean isPdf(byte[] dati) {
+        return dati.length > 4 && dati[0] == 0x25 && dati[1] == 0x50 && dati[2] == 0x44 && dati[3] == 0x46;
+    }
+
+    private static String guessExtension(byte[] dati) {
+        if (dati.length > 3 && dati[0] == (byte)0xFF && dati[1] == (byte)0xD8) return ".jpg";
+        if (dati.length > 3 && dati[0] == (byte)0x89 && dati[1] == 0x50 && dati[2] == 0x4E && dati[3] == 0x47) return ".png";
+        if (dati.length > 3 && dati[0] == 0x47 && dati[1] == 0x49 && dati[2] == 0x46) return ".gif";
+        if (dati.length > 3 && dati[0] == 0x42 && dati[1] == 0x4D) return ".bmp";
+        return ".png";
+    }
+
+    private static String ocrPdf(byte[] dati) throws IOException, TesseractException {
+        File temp = File.createTempFile("ocr_pdf_", ".pdf");
+        try {
+            Files.write(temp.toPath(), dati);
+            try (PDDocument doc = Loader.loadPDF(temp)) {
+                PDFRenderer renderer = new PDFRenderer(doc);
+                BufferedImage img = renderer.renderImageWithDPI(0, 300);
+                return tesseract.doOCR(img);
+            }
+        } finally {
+            temp.delete();
+        }
     }
 }
