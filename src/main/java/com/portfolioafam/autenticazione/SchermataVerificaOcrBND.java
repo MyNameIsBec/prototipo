@@ -30,9 +30,9 @@ public class SchermataVerificaOcrBND {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Seleziona fronte e retro della tessera sanitaria");
         chooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Immagini e PDF", "*.png", "*.jpg", "*.jpeg", "*.pdf"),
             new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg"),
-            new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("JPG/JPEG", "*.jpg", "*.jpeg"));
         List<File> files = chooser.showOpenMultipleDialog(null);
         if (files == null || files.isEmpty()) return;
         if (files.size() > 2) {
