@@ -1,6 +1,7 @@
 package com.portfolioafam.gestioneprofilo;
 
 import com.portfolioafam.model.StudenteEntity;
+import com.portfolioafam.autenticazione.SchermataVerifica2FABND;
 import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.SessionManager;
@@ -17,11 +18,13 @@ public class ProfiloBND {
     @FXML private Label nomeCognomeLabel, cfLabel, emailLabel, telefonoLabel, cfDettaglioLabel, nascitaLabel, datiAccademiciLabel;
     private VisualizzaProfiloCTRL visualizzaProfiloCtrl;
     private ModificaImmagineCTRL modificaImmagineCtrl;
+    private SchermataVerifica2FABND verifica2faBnd;
 
     public ProfiloBND() {}
 
     public void setVisualizzaProfiloCtrl(VisualizzaProfiloCTRL c) { this.visualizzaProfiloCtrl = c; }
     public void setModificaImmagineCtrl(ModificaImmagineCTRL c) { this.modificaImmagineCtrl = c; }
+    public void setVerifica2faBnd(SchermataVerifica2FABND b) { this.verifica2faBnd = b; }
 
     @FXML
     private void initialize() {
@@ -98,7 +101,12 @@ public class ProfiloBND {
     @FXML private void handleModificaPassword() { SceneManager.switchTo("ModificaPassword"); }
     @FXML private void handleModificaTelefono() { SceneManager.switchTo("ModificaTelefono"); }
     @FXML private void handleModificaDatiAccademici() { SceneManager.switchTo("ModificaDatiAccademici"); }
-    @FXML private void handleModifica2FA() { SceneManager.switchTo("SchermataVerifica2FA"); }
+    @FXML private void handleModifica2FA() {
+        if (verifica2faBnd != null) {
+            verifica2faBnd.setPaginaPrecedente("SchermataProfilo");
+        }
+        SceneManager.switchTo("SchermataVerifica2FA");
+    }
     @FXML private void handleModificaVisibilita() { SceneManager.switchTo("SchermataVisibilitaProfilo"); }
     @FXML private void handleEliminaAccount() { SceneManager.switchTo("Informativa"); }
     @FXML private void handleLogout() {

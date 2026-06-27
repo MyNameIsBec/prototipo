@@ -4,6 +4,7 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
@@ -12,7 +13,16 @@ public class OCRUtil {
     private static final Tesseract tesseract = new Tesseract();
 
     static {
-        tesseract.setDatapath("/usr/share/tesseract-ocr/5/tessdata");
+        String tessdata = System.getenv("TESSDATA_PREFIX");
+        if (tessdata != null) {
+            tesseract.setDatapath(tessdata);
+        } else if (new File("/usr/share/tesseract-ocr/5/tessdata").exists()) {
+            tesseract.setDatapath("/usr/share/tesseract-ocr/5/tessdata");
+        } else if (new File("C:/Program Files/Tesseract-OCR/tessdata").exists()) {
+            tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
+        } else if (new File("C:/Program Files (x86)/Tesseract-OCR/tessdata").exists()) {
+            tesseract.setDatapath("C:/Program Files (x86)/Tesseract-OCR/tessdata");
+        }
         tesseract.setLanguage("ita");
     }
 

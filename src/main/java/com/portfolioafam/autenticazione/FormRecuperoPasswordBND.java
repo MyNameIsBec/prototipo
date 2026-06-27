@@ -1,6 +1,8 @@
 package com.portfolioafam.autenticazione;
 import com.portfolioafam.model.StudenteEntity;
+import com.portfolioafam.repository.StudenteRepository;
 import com.portfolioafam.util.AlertUtils;
+import com.portfolioafam.util.PasswordFieldUtils;
 import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.ValidationUtils;
 import javafx.fxml.FXML;
@@ -11,8 +13,17 @@ public class FormRecuperoPasswordBND {
     @FXML private Label statoLabel;
     private RecuperoPasswordCTRL recuperoPasswordCtrl;
     private String cfVerificato;
+    private StudenteEntity studente;
+    private SchermataVerifica2FABND verifica2faBnd;
+    private StudenteRepository studenteRepository;
     public FormRecuperoPasswordBND() {}
+    @FXML private void initialize() {
+        PasswordFieldUtils.addToggle(nuovaPasswordField);
+        PasswordFieldUtils.addToggle(confermaPasswordField);
+    }
     public void setRecuperoPasswordCtrl(RecuperoPasswordCTRL c) { this.recuperoPasswordCtrl = c; }
+    public void setVerifica2faBnd(SchermataVerifica2FABND b) { this.verifica2faBnd = b; }
+    public void setStudenteRepository(StudenteRepository r) { this.studenteRepository = r; }
     @FXML private void handleConferma() {
         String email = emailField.getText();
         String cf = cfField.getText().toUpperCase();
@@ -23,6 +34,7 @@ public class FormRecuperoPasswordBND {
                 StudenteEntity s = recuperoPasswordCtrl.verificaUtentePerRecupero(email);
                 if (!s.getCf().equalsIgnoreCase(cf)) { AlertUtils.mostraErrore("Errore", "I dati non corrispondono"); return; }
                 cfVerificato = cf;
+                studente = s;
                 statoLabel.setText("Verifica riuscita. Inserisci la nuova password.");
                 nuovaPasswordField.setVisible(true);
                 confermaPasswordField.setVisible(true);
@@ -38,8 +50,16 @@ public class FormRecuperoPasswordBND {
         try {
             if (recuperoPasswordCtrl != null) {
                 recuperoPasswordCtrl.resetPassword(cfVerificato, pw);
-                AlertUtils.mostraMessaggio("Recupero Password", "Password modificata con successo");
-                SceneManager.switchTo("SchermataAccesso");
+                if (verifica2faBnd != null) {
+                    verifica2faBnd.setStudente(studente);
+                    verifica2faBnd.setStudenteRepository(studenteRepository);
+                    verifica2faBnd.setOnVerificaSuccesso(() -> {
+                        AlertUtils.mostraMessaggio("Verifica 2FA", "Verifica riuscita");
+                        SceneManager.switchTo("HomePage");
+                    });
+                }
+                verifica2faBnd.setPaginaPrecedente("FormRecuperoPassword");
+                SceneManager.switchTo("SchermataVerifica2FA");
             }
         } catch (Exception e) { AlertUtils.mostraErrore("Errore", e.getMessage()); }
     }

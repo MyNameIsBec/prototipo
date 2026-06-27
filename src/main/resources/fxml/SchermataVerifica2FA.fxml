@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
-
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      alignment="CENTER" style="-fx-background-color: #f5f5f5;">
+      alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5;">
 
-    <VBox spacing="0" alignment="CENTER_LEFT" maxWidth="420" style="-fx-background-color: white; -fx-padding: 26; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
-        <Label text="Verifica OTP" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-        <Label text="Inserisci il codice a 6 cifre inviato alla tua email." wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" />
-        <padding><Insets top="26" right="26" bottom="26" left="26" /></padding>
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 12 30; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
+        <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+            <image><Image url="@/images/logo.png" backgroundLoading="true"/></image>
+        </ImageView>
+        <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="← Indietro" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
+    </HBox>
 
-        <Label text="Codice OTP" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
-        <TextField fx:id="otpField" promptText="123456" maxWidth="200" style="-fx-font-size: 24px; -fx-alignment: center; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #6366f1; -fx-border-radius: 8; -fx-border-width: 2;" />
+    <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+        <VBox spacing="0" alignment="CENTER_LEFT" maxWidth="420" style="-fx-background-color: white; -fx-padding: 26; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+            <Label text="Verifica in due passaggi" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label text="Inserisci l'email che hai utilizzato per l'autenticazione a due fattori." wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" />
 
-        <Button fx:id="verificaButton" text="VERIFICA" onAction="#handleVerifica" style="-fx-font-size: 16px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 8; -fx-padding: 10 24; -fx-font-weight: bold;" maxWidth="Infinity">
-            <VBox.margin><Insets top="18" /></VBox.margin>
-        </Button>
+            <Label text="Email per la verifica" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <TextField fx:id="email2faField" promptText="mario.rossi@afam.it" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="Infinity" />
 
-        <Label fx:id="messaggioLabel" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #ef4444;" />
+            <Button fx:id="inviaButton" text="INVIA" onAction="#handleInvia" style="-fx-font-size: 13px; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" maxWidth="Infinity">
+                <VBox.margin><Insets top="12" /></VBox.margin>
+            </Button>
+
+            <Separator style="-fx-padding: 12 0;" />
+
+            <Label text="Codice OTP" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <TextField fx:id="otpField" promptText="123456" maxWidth="200" style="-fx-font-size: 24px; -fx-alignment: center; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #6366f1; -fx-border-radius: 8; -fx-border-width: 2;" />
+
+            <Button fx:id="verificaButton" text="VERIFICA" onAction="#handleVerifica" style="-fx-font-size: 13px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" maxWidth="Infinity">
+                <VBox.margin><Insets top="12" /></VBox.margin>
+            </Button>
+
+            <Label fx:id="messaggioLabel" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #ef4444;" />
+        </VBox>
     </VBox>
 </VBox>

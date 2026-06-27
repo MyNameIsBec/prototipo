@@ -12,7 +12,7 @@
         <TextField fx:id="emailField" promptText="nuova.email@afam.it" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" />
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <padding><Insets top="8" /></padding>
-            <Button text="Indietro" onAction="#handleIndietro" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
+            <Button text="← Indietro" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
             <Button text="SALVA" onAction="#handleSalva" style="-fx-font-size: 13px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
         </HBox>
         <Label fx:id="messaggioLabel" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #ef4444;" />

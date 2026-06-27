@@ -1,6 +1,8 @@
 package com.portfolioafam.autenticazione;
 
+import com.portfolioafam.service.EmailService;
 import com.portfolioafam.service.OTPService;
+import jakarta.mail.MessagingException;
 
 public class Verifica2faCTRL {
 

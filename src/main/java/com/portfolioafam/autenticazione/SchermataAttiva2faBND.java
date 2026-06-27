@@ -11,10 +11,19 @@ public class SchermataAttiva2faBND {
     private Attiva2faCTRL attiva2faCtrl;
     public SchermataAttiva2faBND() {}
     public void setAttiva2faCtrl(Attiva2faCTRL c) { this.attiva2faCtrl = c; }
+    @FXML private void handleIndietro() { SceneManager.switchTo("FormPassword"); }
     @FXML private void handleInviaOTP() {
         String email = email2faField.getText();
         if (email == null || email.isEmpty()) { AlertUtils.mostraErrore("Errore", "Inserisci l'email"); return; }
-        if (attiva2faCtrl != null) { attiva2faCtrl.generaEOttieniOTP(email); messaggioLabel.setText("OTP inviata"); }
+        if (attiva2faCtrl != null) {
+            String otp = attiva2faCtrl.generaEOttieniOTP(email);
+            try {
+                attiva2faCtrl.inviaOTPEmail(email, otp);
+                messaggioLabel.setText("OTP inviata");
+            } catch (Exception e) {
+                AlertUtils.mostraErrore("Errore", "Impossibile inviare l'email di verifica");
+            }
+        }
     }
     @FXML private void handleVerificaOTP() {
         String otp = otpField.getText();
@@ -28,7 +37,12 @@ public class SchermataAttiva2faBND {
             } catch (Exception e) { AlertUtils.mostraErrore("Errore", e.getMessage()); }
         } else {
             messaggioLabel.setText("Codice errato");
-            if (attiva2faCtrl != null) attiva2faCtrl.generaEOttieniOTP(email);
+            if (attiva2faCtrl != null) {
+                String newOtp = attiva2faCtrl.generaEOttieniOTP(email);
+                try {
+                    attiva2faCtrl.inviaOTPEmail(email, newOtp);
+                } catch (Exception e) { }
+            }
         }
     }
 }

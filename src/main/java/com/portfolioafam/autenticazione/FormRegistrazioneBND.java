@@ -6,14 +6,37 @@ import com.portfolioafam.util.ValidationUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 public class FormRegistrazioneBND {
-    @FXML private TextField nomeField, cognomeField, cfField, dataNascitaField, luogoNascitaField, emailField, telefonoField;
+    @FXML private TextField nomeField, cognomeField, cfField, luogoNascitaField, emailField, telefonoField;
+    @FXML private DatePicker dataNascitaPicker;
     @FXML private TextArea datiAccademiciArea;
     @FXML private CheckBox gdprCheckBox;
+    @FXML private Button registratiButton;
     private RegistrazioneCTRL registrazioneCtrl;
     private FormPasswordBND formPasswordBnd;
+    private static String prefillEmail, prefillNome, prefillCognome, prefillDatiAccademici;
+
     public FormRegistrazioneBND() {}
+
+    public static void setPrefill(String email, String nome, String cognome, String datiAccademici) {
+        prefillEmail = email;
+        prefillNome = nome;
+        prefillCognome = cognome;
+        prefillDatiAccademici = datiAccademici;
+    }
+
     public void setRegistrazioneCtrl(RegistrazioneCTRL c) { this.registrazioneCtrl = c; }
     public void setFormPasswordBnd(FormPasswordBND b) { this.formPasswordBnd = b; }
+
+    @FXML private void initialize() {
+        if (prefillEmail != null) {
+            emailField.setText(prefillEmail);
+            nomeField.setText(prefillNome);
+            cognomeField.setText(prefillCognome);
+            if (prefillDatiAccademici != null) datiAccademiciArea.setText(prefillDatiAccademici);
+            prefillEmail = null; prefillNome = null; prefillCognome = null; prefillDatiAccademici = null;
+        }
+    }
+
     @FXML private void handleRegistrati() {
         String nome = nomeField.getText(), cognome = cognomeField.getText(), cf = cfField.getText().toUpperCase(), email = emailField.getText();
         if (!ValidationUtils.isNotEmpty(nome) || !ValidationUtils.isNotEmpty(cognome) || !ValidationUtils.isNotEmpty(cf) || !ValidationUtils.isNotEmpty(email)) {
@@ -28,8 +51,10 @@ public class FormRegistrazioneBND {
             s.setTelefono(telefonoField.getText());
             s.setDatiAccademici(datiAccademiciArea.getText());
             if (formPasswordBnd != null) formPasswordBnd.setStudentePending(s);
+            SchermataVerificaOcrBND.setStudentePending(s);
             SceneManager.switchTo("SchermataVerificaOcr");
-        } catch (Exception e) { AlertUtils.mostraErrore("Errore", "Connessione al server interrotta"); }
+        } catch (Exception e) { e.printStackTrace(); AlertUtils.mostraErrore("Errore", "Connessione al server interrotta: " + e.getMessage()); }
     }
+
     @FXML private void handleIndietro() { SceneManager.switchTo("SchermataAccesso"); }
 }

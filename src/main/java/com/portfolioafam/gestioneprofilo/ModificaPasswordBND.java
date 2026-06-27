@@ -1,6 +1,7 @@
 package com.portfolioafam.gestioneprofilo;
 
 import com.portfolioafam.util.AlertUtils;
+import com.portfolioafam.util.PasswordFieldUtils;
 import com.portfolioafam.util.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,6 +12,10 @@ public class ModificaPasswordBND {
     private ModificaPasswordCTRL modificaPasswordCtrl;
 
     public ModificaPasswordBND() {}
+    @FXML private void initialize() {
+        PasswordFieldUtils.addToggle(passwordAttualeField);
+        PasswordFieldUtils.addToggle(nuovaPasswordField);
+    }
     public void setModificaPasswordCtrl(ModificaPasswordCTRL c) { this.modificaPasswordCtrl = c; }
 
     @FXML private void handleSalva() {

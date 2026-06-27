@@ -6,9 +6,7 @@
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5;">
 
-    <HBox alignment="CENTER_LEFT" maxWidth="800" style="-fx-padding: 12 30;">
-        <Label text="← Indietro" onMouseClicked="#handleIndietro" style="-fx-font-size: 14px; -fx-text-fill: #6366f1; -fx-cursor: hand; -fx-underline: true;" />
-    </HBox>
+
 
     <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS" maxWidth="800" spacing="16" style="-fx-padding: 20 30 30 30;">
         <Label text="Contenuto segnalato" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
@@ -24,7 +22,7 @@
 
             <HBox spacing="10">
                 <padding><Insets top="8" /></padding>
-                <Button text="Indietro" onAction="#handleIndietro" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
+                <Button text="← Indietro" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
                 <Button text="ELIMINA" onAction="#handleElimina" style="-fx-font-size: 13px; -fx-background-color: #ef4444; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
             </HBox>
         </VBox>

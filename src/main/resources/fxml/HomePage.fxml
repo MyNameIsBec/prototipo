@@ -19,7 +19,7 @@
             </HBox>
             <Label text="Utente esterno" style="-fx-font-size: 11px; -fx-background-color: #6366f1; -fx-text-fill: white; -fx-padding: 3 10; -fx-background-radius: 10;" />
         </HBox>
-        <Button text="LOGIN" fx:id="loginButton" onAction="#handleLogin" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 6 16;" />
+        <Button text="LOGIN" fx:id="loginButton" onAction="#handleLogin" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
     </HBox>
 
     <VBox fx:id="heroContent" alignment="CENTER" VBox.vgrow="ALWAYS" spacing="0" style="-fx-padding: 40 40 50 40;">
@@ -31,11 +31,9 @@
             <padding><Insets top="16" /></padding>
         </Label>
         <Label text="Cerca uno studente per nome o strumento e scopri i suoi contenuti pubblici" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" wrapText="true" alignment="CENTER" />
-        <HBox alignment="CENTER" maxWidth="520" spacing="0">
+        <TextField fx:id="ricercaField" promptText="Cerca studente per nome o strumento..." maxWidth="520" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-width: 1;" onMouseClicked="#handleCerca">
             <padding><Insets top="24" /></padding>
-            <TextField fx:id="ricercaField" promptText="Cerca studente per nome o strumento..." style="-fx-padding: 10; -fx-background-radius: 6 0 0 6; -fx-border-color: #ddd; -fx-border-width: 1; -fx-border-radius: 6 0 0 6;" HBox.hgrow="ALWAYS" onAction="#handleCerca" />
-            <Button text="Cerca" onAction="#handleCerca" style="-fx-padding: 10 20; -fx-background-radius: 0 6 6 0; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #4CAF50; -fx-border-width: 1;" />
-        </HBox>
+        </TextField>
         <Region prefHeight="40" />
         <VBox maxWidth="540" style="-fx-background-color: #eef2ff; -fx-padding: 12 16; -fx-background-radius: 8;">
             <Label text="Da ospite puoi solo consultare profili pubblici. Per scaricare contenuti o lasciare feedback devi identificarti." wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #4338ca;" />

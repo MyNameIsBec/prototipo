@@ -85,7 +85,7 @@
                 <configuration>
                     <mainClass>com.portfolioafam.app.Main</mainClass>
                     <options>
-                        <option>-Dportfolio.2fa.enabled=false</option>
+                        <option>--add-opens=java.base/java.lang=ALL-UNNAMED</option>
                     </options>
                 </configuration>
             </plugin>

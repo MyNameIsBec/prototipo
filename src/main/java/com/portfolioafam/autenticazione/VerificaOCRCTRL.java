@@ -7,11 +7,7 @@ import java.io.IOException;
 public class VerificaOCRCTRL {
 
     public boolean verificaTessera(byte[] imageData, String cf, String nome, String cognome)
-            throws IOException {
-        try {
-            return OCRUtil.verificaDatiTessera(imageData, cf, nome, cognome);
-        } catch (Exception e) {
-            return true;
-        }
+            throws Exception {
+        return OCRUtil.verificaDatiTessera(imageData, cf, nome, cognome);
     }
 }

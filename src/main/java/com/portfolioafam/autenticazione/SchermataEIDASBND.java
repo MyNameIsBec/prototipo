@@ -1,35 +1,93 @@
 package com.portfolioafam.autenticazione;
 import com.portfolioafam.model.StudenteEntity;
+import com.portfolioafam.repository.StudenteRepository;
 import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import java.sql.SQLException;
+import java.util.Optional;
+import java.util.UUID;
 
 public class SchermataEIDASBND {
     @FXML private TextField emailField;
-    private DatiCondivisiBND datiCondivisiBnd;
+    @FXML private ListView<String> providerListView;
+    @FXML private VBox providerBox, credenzialiBox;
+    @FXML private Label providerLabel, messaggioLabel;
+    private StudenteRepository studenteRepository;
+    private SchermataVerifica2FABND verifica2faBnd;
+    private String providerSelezionato;
 
     public SchermataEIDASBND() {}
-    public void setDatiCondivisiBnd(DatiCondivisiBND b) { this.datiCondivisiBnd = b; }
+    public void setStudenteRepository(StudenteRepository r) { this.studenteRepository = r; }
+    public void setVerifica2faBnd(SchermataVerifica2FABND b) { this.verifica2faBnd = b; }
+
+    @FXML private void initialize() {
+        providerListView.getItems().addAll(
+            "Italia (SPID)", "Germania (eID)", "Belgio (eID)",
+            "Estonia (eID)", "Francia (FranceConnect)", "Spagna (Cl@ve)",
+            "Paesi Bassi (DigiD)", "Portogallo (Chave Móvel)"
+        );
+    }
+
+    @FXML private void handleSelezionaProvider() {
+        String selected = providerListView.getSelectionModel().getSelectedItem();
+        if (selected == null) { AlertUtils.mostraErrore("eIDAS", "Seleziona un paese"); return; }
+        providerSelezionato = selected;
+        providerLabel.setText(providerSelezionato);
+        providerBox.setManaged(false);
+        providerBox.setVisible(false);
+        credenzialiBox.setManaged(true);
+        credenzialiBox.setVisible(true);
+    }
+
+    @FXML private void handleTornaAProvider() {
+        providerBox.setManaged(true);
+        providerBox.setVisible(true);
+        credenzialiBox.setManaged(false);
+        credenzialiBox.setVisible(false);
+    }
 
     @FXML
     private void handleAccedi() {
         String email = emailField.getText();
         if (email == null || email.isEmpty()) { AlertUtils.mostraErrore("eIDAS", "Inserisci l'email eIDAS"); return; }
-        StudenteEntity s = new StudenteEntity("DUPJNT85M01Z110A", "Jean", "Dupont", email, "", email, "PRIVATO");
-        s.setDatiAccademici("Violino - Conservatoire de Paris - A.A. 2025/26");
-
-        if (datiCondivisiBnd != null) {
-            datiCondivisiBnd.setDatiStudente(s, "eIDAS");
-            datiCondivisiBnd.setOnConsenso(() -> {
+        try {
+            Optional<StudenteEntity> esistente = studenteRepository.findByEmail(email);
+            if (esistente.isPresent()) {
+                String tempPw = UUID.randomUUID().toString().substring(0, 12) + "!Aa1";
+                StudenteEntity s = esistente.get();
+                s.setHashPassword(tempPw);
+                s.setPasswordTemporanea(true);
+                studenteRepository.save(s);
                 SessionManager.getInstance().avviaSessioneStudente(s);
-                AlertUtils.mostraMessaggio("Accesso eIDAS", "Accesso effettuato con successo");
-                SceneManager.switchTo("SchermataProfilo");
-            });
+                SceneManager.switchTo("ModificaPasswordPrimoAccesso");
+            } else {
+                String nome = capitalizza(email.split("@")[0].replace(".", " "));
+                String cognome = nome.contains(" ") ? nome.substring(nome.indexOf(" ")+1) : "Dupont";
+                nome = nome.contains(" ") ? nome.substring(0, nome.indexOf(" ")) : nome;
+                FormRegistrazioneBND.setPrefill(email, nome, cognome, "eIDAS (" + providerSelezionato + ")");
+                SceneManager.switchTo("FormRegistrazione");
+            }
+        } catch (SQLException e) {
+            AlertUtils.mostraErrore("Errore", "Errore di connessione al database");
         }
-        SceneManager.switchTo("DatiCondivisi");
     }
 
     @FXML private void handleIndietro() { SceneManager.switchTo("SchermataAccesso"); }
+
+    private static String capitalizza(String s) {
+        if (s == null || s.isEmpty()) return "";
+        String[] parti = s.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String p : parti) {
+            if (!p.isEmpty()) {
+                sb.append(Character.toUpperCase(p.charAt(0))).append(p.substring(1).toLowerCase());
+                sb.append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
 }

@@ -71,6 +71,11 @@ public class SessionManager {
         return amministratore != null ? amministratore.getIdAmministratore() : null;
     }
 
+    private Long utenteEsternoId;
+
+    public void setUtenteEsternoId(Long id) { this.utenteEsternoId = id; }
+    public Long getUtenteEsternoId() { return utenteEsternoId; }
+
     public static void reset() {
         instance = null;
     }

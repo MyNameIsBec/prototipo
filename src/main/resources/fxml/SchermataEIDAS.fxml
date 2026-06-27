@@ -6,18 +6,29 @@
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER" style="-fx-background-color: #f5f5f5;">
 
-    <VBox spacing="8" alignment="CENTER_LEFT" maxWidth="400" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+    <VBox spacing="0" alignment="CENTER_LEFT" maxWidth="420" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
         <Label text="Accedi con eIDAS" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-        <Label text="Inserisci le tue credenziali eIDAS per accedere" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" />
+        <Label text="Seleziona il tuo paese e inserisci le credenziali eIDAS" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" />
 
-        <Label text="Email" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
-        <TextField fx:id="emailField" promptText="nome@provider-eidas.eu" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="Infinity" />
+        <VBox fx:id="providerBox" spacing="8">
+            <Label text="Scegli il paese" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <ListView fx:id="providerListView" prefHeight="160" maxWidth="Infinity" style="-fx-background-radius: 6; -fx-border-color: #ddd;" />
+            <Button text="Seleziona paese" onAction="#handleSelezionaProvider" style="-fx-font-size: 13px; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" maxWidth="Infinity" />
+            <Button text="← Indietro" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" maxWidth="Infinity" />
+        </VBox>
 
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-            <padding><Insets top="18" /></padding>
-            <Button text="Indietro" onAction="#handleIndietro" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
-            <Button text="Accedi" onAction="#handleAccedi" style="-fx-font-size: 13px; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
-        </HBox>
+        <VBox fx:id="credenzialiBox" managed="false" visible="false" spacing="8">
+            <Label text="Paese selezionato:" style="-fx-font-size: 12px; -fx-text-fill: #888;" />
+            <Label fx:id="providerLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            <Label text="Email" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <TextField fx:id="emailField" promptText="nome@provider-eidas.eu" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="Infinity" />
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <padding><Insets top="18" /></padding>
+                <Button text="← Indietro" onAction="#handleTornaAProvider" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
+                <Button text="Accedi" onAction="#handleAccedi" style="-fx-font-size: 13px; -fx-background-color: #e67e22; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
+            </HBox>
+        </VBox>
 
         <Label fx:id="messaggioLabel" wrapText="true" style="-fx-font-size: 13px; -fx-text-fill: #ef4444;" />
     </VBox>

@@ -30,7 +30,7 @@
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <padding><Insets top="18" /></padding>
-            <Button text="Indietro" onAction="#handleAnnulla" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
+            <Button text="← Indietro" onAction="#handleAnnulla" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
             <Button text="Conferma" onAction="#handleConferma" style="-fx-font-size: 13px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 8 24; -fx-font-weight: bold;" />
         </HBox>
 

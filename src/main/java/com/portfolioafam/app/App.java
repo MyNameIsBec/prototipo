@@ -37,6 +37,7 @@ public class App extends Application {
     private RegistrazioneCTRL registrazioneCtrl;
     private RecuperoPasswordCTRL recuperoPasswordCtrl;
     private SchermataVerifica2FABND verifica2faBnd;
+    private ModificaPasswordPrimoAccessoBND modificaPasswordPrimoAccessoBnd;
 
     private VisualizzaProfiloCTRL visualizzaProfiloCtrl;
     private ModificaImmagineCTRL modificaImmagineCtrl;
@@ -89,6 +90,11 @@ public class App extends Application {
 
         verifica2faBnd = new SchermataVerifica2FABND();
         verifica2faBnd.setVerifica2faCtrl(verifica2faCtrl);
+        verifica2faBnd.setEmailService(emailService);
+
+        modificaPasswordPrimoAccessoBnd = new ModificaPasswordPrimoAccessoBND();
+        modificaPasswordPrimoAccessoBnd.setStudenteRepository(studenteRepository);
+        modificaPasswordPrimoAccessoBnd.setVerifica2faBnd(verifica2faBnd);
 
         visualizzaProfiloCtrl = new VisualizzaProfiloCTRL(studenteRepository);
         modificaImmagineCtrl = new ModificaImmagineCTRL(studenteRepository);
@@ -99,23 +105,24 @@ public class App extends Application {
             SchermataAccessoBND b = new SchermataAccessoBND();
             b.setLoginCtrl(loginCtrl);
             b.setVerifica2faBnd(verifica2faBnd);
+            b.setStudenteRepository(studenteRepository);
+            b.setModificaPasswordPrimoAccessoBnd(modificaPasswordPrimoAccessoBnd);
             return loadFxml(SchermataAccessoBND.class, b);
         });
         reg("SchermataVerifica2FA", () -> loadFxml(SchermataVerifica2FABND.class, verifica2faBnd));
 
                 reg("SchermataSPID", () -> {
             SchermataSPIDBND b = new SchermataSPIDBND();
-            DatiCondivisiBND d = new DatiCondivisiBND();
-            b.setDatiCondivisiBnd(d);
+            b.setStudenteRepository(studenteRepository);
+            b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(SchermataSPIDBND.class, b);
         });
                 reg("SchermataEIDAS", () -> {
             SchermataEIDASBND b = new SchermataEIDASBND();
-            DatiCondivisiBND d = new DatiCondivisiBND();
-            b.setDatiCondivisiBnd(d);
+            b.setStudenteRepository(studenteRepository);
+            b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(SchermataEIDASBND.class, b);
         });
-        reg("DatiCondivisi", () -> loadFxml(DatiCondivisiBND.class, new DatiCondivisiBND()));
 
         FormPasswordBND formPasswordBnd = new FormPasswordBND();
         formPasswordBnd.setRegistrazioneCtrl(registrazioneCtrl);
@@ -139,20 +146,25 @@ public class App extends Application {
         reg("FormRecuperoPassword", () -> {
             FormRecuperoPasswordBND b = new FormRecuperoPasswordBND();
             b.setRecuperoPasswordCtrl(recuperoPasswordCtrl);
+            b.setVerifica2faBnd(verifica2faBnd);
+            b.setStudenteRepository(studenteRepository);
             return loadFxml(FormRecuperoPasswordBND.class, b);
         });
 
         reg("SchermataAttiva2fa", () -> {
             SchermataAttiva2faBND b = new SchermataAttiva2faBND();
-            Attiva2faCTRL c = new Attiva2faCTRL(studenteRepository, otpService);
+            Attiva2faCTRL c = new Attiva2faCTRL(studenteRepository, otpService, emailService);
             b.setAttiva2faCtrl(c);
             return loadFxml(SchermataAttiva2faBND.class, b);
         });
+
+        reg("ModificaPasswordPrimoAccesso", () -> loadFxml(ModificaPasswordPrimoAccessoBND.class, modificaPasswordPrimoAccessoBnd));
 
         reg("SchermataProfilo", () -> {
             ProfiloBND b = new ProfiloBND();
             b.setVisualizzaProfiloCtrl(visualizzaProfiloCtrl);
             b.setModificaImmagineCtrl(modificaImmagineCtrl);
+            b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(ProfiloBND.class, b);
         });
 
@@ -231,6 +243,11 @@ public class App extends Application {
         });
         reg("PopupCondivisione", () -> loadFxml(PopupCondivisioneBND.class, new PopupCondivisioneBND()));
 
+        reg("RicercaProfilo", () -> {
+            RicercaProfiloBND b = new RicercaProfiloBND();
+            b.setRicercaProfiloCtrl(new RicercaProfiloCTRL(studenteRepository));
+            return loadFxml(RicercaProfiloBND.class, b);
+        });
         reg("RisultatiRicerca", () -> {
             RisultatiRicercaBND b = new RisultatiRicercaBND();
             b.setRicercaProfiloCtrl(new RicercaProfiloCTRL(studenteRepository));
@@ -239,7 +256,12 @@ public class App extends Application {
         reg("SchermataProfiloStudente", () -> {
             SchermataProfiloStudenteBND b = new SchermataProfiloStudenteBND();
             b.setRepositories(studenteRepository, cartellaRepository, contenutoRepository);
+            b.setScaricaContenutoCtrl(new ScaricaContenutoCTRL(contenutoRepository));
             return loadFxml(SchermataProfiloStudenteBND.class, b);
+        });
+
+        reg("SchermataVisualizzaContenuto", () -> {
+            return loadFxml(SchermataVisualizzaContenutoBND.class, new SchermataVisualizzaContenutoBND());
         });
 
         reg("InviaSegnalazione", () -> {

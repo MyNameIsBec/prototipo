@@ -13,7 +13,7 @@
         </ImageView>
         <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
         <Region HBox.hgrow="ALWAYS" />
-        <Label text="← Home" onMouseClicked="#handleIndietro" style="-fx-font-size: 14px; -fx-text-fill: #6366f1; -fx-cursor: hand; -fx-underline: true;" />
+        <Button text="← Indietro" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
     </HBox>
 
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
@@ -45,7 +45,7 @@
                     <TextField fx:id="cognomeField" GridPane.rowIndex="0" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
 
                     <Label text="Data nascita" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <TextField fx:id="dataNascitaField" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS"/>
+                    <DatePicker fx:id="dataNascitaPicker" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" promptText="gg/mm/aaaa" style="-fx-padding: 4;"/>
 
                     <Label text="Luogo nascita" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
                     <TextField fx:id="luogoNascitaField" GridPane.rowIndex="1" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS"/>
@@ -71,7 +71,7 @@
 
             <HBox spacing="15" alignment="CENTER">
                 <Button text="Indietro" onAction="#handleIndietro" prefWidth="130" prefHeight="40"
-                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-background-radius: 8;"/>
+                        style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4;"/>
                 <Button fx:id="registratiButton" text="REGISTRATI" onAction="#handleRegistrati"
                         prefWidth="180" prefHeight="40"
                         style="-fx-font-size: 16px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 8;"/>

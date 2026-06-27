@@ -13,7 +13,6 @@
         </ImageView>
         <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
         <Region HBox.hgrow="ALWAYS" />
-        <Label text="← Home" onMouseClicked="#handleIndietro" style="-fx-font-size: 14px; -fx-text-fill: #6366f1; -fx-cursor: hand; -fx-underline: true;" />
     </HBox>
 
     <VBox alignment="CENTER" spacing="16" VBox.vgrow="ALWAYS" style="-fx-padding: 30;" maxWidth="500">
@@ -32,7 +31,7 @@
         </VBox>
 
         <HBox spacing="10" alignment="CENTER">
-            <Button text="Torna alla Home" onAction="#handleIndietro" style="-fx-font-size: 13px; -fx-background-color: transparent; -fx-text-fill: #6366f1; -fx-border-color: #6366f1; -fx-border-radius: 4; -fx-padding: 8 16;" />
+            <Button text="← Home" onAction="#handleIndietro" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
             <Button text="RECUPERA" onAction="#handleRecupera" style="-fx-font-size: 14px; -fx-background-color: #2196F3; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 10 24; -fx-font-weight: bold;" />
         </HBox>
     </VBox>

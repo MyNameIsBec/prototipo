@@ -13,6 +13,7 @@ public class SceneManager {
     private static Stage primaryStage;
     private static final Map<String, Scene> scenes = new HashMap<>();
     private static final Map<String, Supplier<Parent>> factories = new HashMap<>();
+    private static final Map<String, Object> controllers = new HashMap<>();
     private static final int DEFAULT_WIDTH = 1366;
     private static final int DEFAULT_HEIGHT = 768;
 
@@ -46,12 +47,16 @@ public class SceneManager {
             if (factory != null) {
                 scene = new Scene(factory.get(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
                 scenes.put(name, scene);
-                factories.remove(name);
             }
         }
         if (scene != null && primaryStage != null) {
             primaryStage.setScene(scene);
         }
+    }
+
+    public static void switchToFresh(String name) {
+        scenes.remove(name);
+        switchTo(name);
     }
 
     public static Scene getScene(String name) {
@@ -61,7 +66,6 @@ public class SceneManager {
             if (factory != null) {
                 scene = new Scene(factory.get(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
                 scenes.put(name, scene);
-                factories.remove(name);
             }
         }
         return scene;

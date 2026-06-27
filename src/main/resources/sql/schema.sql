@@ -8,7 +8,8 @@ CREATE TABLE studenti (
     email2fa       VARCHAR(255) NOT NULL UNIQUE,
     immagine_profilo BYTEA,
     dati_accademici TEXT,
-    visibilita_profilo VARCHAR(30) NOT NULL DEFAULT 'PRIVATO'
+    visibilita_profilo VARCHAR(30) NOT NULL DEFAULT 'PRIVATO',
+    password_temporanea BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE amministratori (

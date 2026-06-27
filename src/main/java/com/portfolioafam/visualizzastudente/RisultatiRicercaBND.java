@@ -42,7 +42,7 @@ public class RisultatiRicercaBND {
                 card.setOnMouseClicked(e -> {
                     SchermataProfiloStudenteBND.preloadData(
                         s.getCf(), s.getNome(), s.getCognome(), s.getDatiAccademici());
-                    SceneManager.switchTo("SchermataProfiloStudente");
+                    SceneManager.switchToFresh("SchermataProfiloStudente");
                 });
                 risultatiBox.getChildren().add(card);
             }

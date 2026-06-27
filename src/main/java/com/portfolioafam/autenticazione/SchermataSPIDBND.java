@@ -1,39 +1,81 @@
 package com.portfolioafam.autenticazione;
 import com.portfolioafam.model.StudenteEntity;
+import com.portfolioafam.repository.StudenteRepository;
 import com.portfolioafam.util.AlertUtils;
+import com.portfolioafam.util.PasswordFieldUtils;
 import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import java.sql.SQLException;
+import java.util.Optional;
+import java.util.UUID;
 
 public class SchermataSPIDBND {
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    private DatiCondivisiBND datiCondivisiBnd;
+    @FXML private ListView<String> providerListView;
+    @FXML private VBox providerBox, credenzialiBox;
+    @FXML private Label providerLabel, messaggioLabel;
+    private StudenteRepository studenteRepository;
+    private SchermataVerifica2FABND verifica2faBnd;
+    private String providerSelezionato;
 
     public SchermataSPIDBND() {}
-    public void setDatiCondivisiBnd(DatiCondivisiBND b) { this.datiCondivisiBnd = b; }
+    public void setStudenteRepository(StudenteRepository r) { this.studenteRepository = r; }
+    public void setVerifica2faBnd(SchermataVerifica2FABND b) { this.verifica2faBnd = b; }
+
+    @FXML private void initialize() {
+        PasswordFieldUtils.addToggle(passwordField);
+        providerListView.getItems().addAll(
+            "Aruba ID", "InfoCert ID", "Intesa ID", "Namirial ID",
+            "Poste ID", "Sielte ID", "SPIDItalia", "TIM ID"
+        );
+    }
+
+    @FXML private void handleSelezionaProvider() {
+        String selected = providerListView.getSelectionModel().getSelectedItem();
+        if (selected == null) { AlertUtils.mostraErrore("SPID", "Seleziona un provider"); return; }
+        providerSelezionato = selected;
+        providerLabel.setText(providerSelezionato);
+        providerBox.setManaged(false);
+        providerBox.setVisible(false);
+        credenzialiBox.setManaged(true);
+        credenzialiBox.setVisible(true);
+    }
+
+    @FXML private void handleTornaAProvider() {
+        providerBox.setManaged(true);
+        providerBox.setVisible(true);
+        credenzialiBox.setManaged(false);
+        credenzialiBox.setVisible(false);
+    }
 
     @FXML
     private void handleAccedi() {
         String email = emailField.getText();
         if (email == null || email.isEmpty()) { AlertUtils.mostraErrore("SPID", "Inserisci l'email SPID"); return; }
-        String nome = capitalizza(email.split("@")[0].replace(".", " "));
-        String cognome = nome.contains(" ") ? nome.substring(nome.indexOf(" ")+1) : "Rossi";
-        nome = nome.contains(" ") ? nome.substring(0, nome.indexOf(" ")) : nome;
-
-        StudenteEntity s = new StudenteEntity("RSSMRA85M01A271X", nome, cognome, email, "", email, "PRIVATO");
-        s.setDatiAccademici("Pianoforte - Conservatorio - A.A. 2025/26");
-
-        if (datiCondivisiBnd != null) {
-            datiCondivisiBnd.setDatiStudente(s, "SPID");
-            datiCondivisiBnd.setOnConsenso(() -> {
+        try {
+            Optional<StudenteEntity> esistente = studenteRepository.findByEmail(email);
+            if (esistente.isPresent()) {
+                String tempPw = UUID.randomUUID().toString().substring(0, 12) + "!Aa1";
+                StudenteEntity s = esistente.get();
+                s.setHashPassword(tempPw);
+                s.setPasswordTemporanea(true);
+                studenteRepository.save(s);
                 SessionManager.getInstance().avviaSessioneStudente(s);
-                AlertUtils.mostraMessaggio("Accesso SPID", "Accesso effettuato con successo");
-                SceneManager.switchTo("SchermataProfilo");
-            });
+                SceneManager.switchTo("ModificaPasswordPrimoAccesso");
+            } else {
+                String nome = capitalizza(email.split("@")[0].replace(".", " "));
+                String cognome = nome.contains(" ") ? nome.substring(nome.indexOf(" ")+1) : "Rossi";
+                nome = nome.contains(" ") ? nome.substring(0, nome.indexOf(" ")) : nome;
+                FormRegistrazioneBND.setPrefill(email, nome, cognome, "SPID (" + providerSelezionato + ")");
+                SceneManager.switchTo("FormRegistrazione");
+            }
+        } catch (SQLException e) {
+            AlertUtils.mostraErrore("Errore", "Errore di connessione al database");
         }
-        SceneManager.switchTo("DatiCondivisi");
     }
 
     @FXML private void handleIndietro() { SceneManager.switchTo("SchermataAccesso"); }

@@ -14,6 +14,7 @@ public class StudenteEntity {
     private byte[] immagineProfilo;
     private String datiAccademici;
     private String visibilitaProfilo;
+    private boolean passwordTemporanea;
 
     public StudenteEntity() {
     }
@@ -58,6 +59,8 @@ public class StudenteEntity {
 
     public String getVisibilitaProfilo() { return visibilitaProfilo; }
     public void setVisibilitaProfilo(String visibilitaProfilo) { this.visibilitaProfilo = visibilitaProfilo; }
+    public boolean isPasswordTemporanea() { return passwordTemporanea; }
+    public void setPasswordTemporanea(boolean passwordTemporanea) { this.passwordTemporanea = passwordTemporanea; }
 
     @Override
     public String toString() {
