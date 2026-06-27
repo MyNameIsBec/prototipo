@@ -6,12 +6,13 @@ import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 public class SchermataVerifica2FABND {
     @FXML private TextField email2faField;
     @FXML private TextField otpField;
     @FXML private Button inviaButton;
     @FXML private Button verificaButton;
-    @FXML private Label messaggioLabel;
+    @FXML private VBox otpSection;
     private Verifica2faCTRL verifica2faCtrl;
     private String chiave;
     private Runnable onVerificaSuccesso;
@@ -30,6 +31,10 @@ public class SchermataVerifica2FABND {
     public void setEmailService(EmailService e) { this.emailService = e; }
     public void setPaginaPrecedente(String p) { this.paginaPrecedente = p; }
 
+    @FXML private void initialize() {
+        otpSection.setManaged(false);
+        otpSection.setVisible(false);
+    }
     @FXML private void handleIndietro() { SceneManager.switchTo(paginaPrecedente); }
     @FXML private void handleInvia() {
         String email = email2faField.getText();
@@ -40,7 +45,7 @@ public class SchermataVerifica2FABND {
         if (studenteRepository != null && studente != null) {
             try {
                 StudenteEntity s = studenteRepository.findByCf(studente.getCf()).orElse(null);
-                if (s == null || !email.equalsIgnoreCase(s.getEmail2fa())) {
+                if (s != null && s.getEmail2fa() != null && !email.equalsIgnoreCase(s.getEmail2fa())) {
                     AlertUtils.mostraErrore("Errore", "Email non corretta");
                     return;
                 }
@@ -60,10 +65,12 @@ public class SchermataVerifica2FABND {
                     return;
                 }
             }
-            AlertUtils.mostraMessaggio("OTP", "OTP inviata");
+            AlertUtils.mostraMessaggio("OTP", "Codice inviato alla email");
+            otpSection.setManaged(true);
+            otpSection.setVisible(true);
+            inviaButton.setDisable(true);
         }
     }
-
     @FXML private void handleVerifica() {
         String otp = otpField.getText();
         if (otp == null || otp.isEmpty()) {
@@ -73,17 +80,9 @@ public class SchermataVerifica2FABND {
         if (verifica2faCtrl != null && chiave != null) {
             boolean ok = verifica2faCtrl.verificaOTP(chiave, otp);
             if (ok) {
-                messaggioLabel.setText("Verifica riuscita");
                 if (onVerificaSuccesso != null) onVerificaSuccesso.run();
             } else {
-                messaggioLabel.setText("Codice errato");
-                String newOtp = verifica2faCtrl.generaEOttieniOTP(chiave);
-                if (emailService != null) {
-                    try {
-                        emailService.inviaOTP(chiave, newOtp);
-                    } catch (Exception e) { }
-                }
-                AlertUtils.mostraMessaggio("OTP", "OTP reinviata");
+                AlertUtils.mostraErrore("Errore", "Codice errato");
             }
         }
     }

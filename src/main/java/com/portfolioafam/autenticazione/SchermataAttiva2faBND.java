@@ -4,13 +4,18 @@ import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 public class SchermataAttiva2faBND {
     @FXML private TextField email2faField, otpField;
     @FXML private Button inviaButton, verificaButton;
-    @FXML private Label messaggioLabel;
+    @FXML private VBox otpSection;
     private Attiva2faCTRL attiva2faCtrl;
     public SchermataAttiva2faBND() {}
     public void setAttiva2faCtrl(Attiva2faCTRL c) { this.attiva2faCtrl = c; }
+    @FXML private void initialize() {
+        otpSection.setManaged(false);
+        otpSection.setVisible(false);
+    }
     @FXML private void handleIndietro() { SceneManager.switchTo("FormPassword"); }
     @FXML private void handleInviaOTP() {
         String email = email2faField.getText();
@@ -19,7 +24,10 @@ public class SchermataAttiva2faBND {
             String otp = attiva2faCtrl.generaEOttieniOTP(email);
             try {
                 attiva2faCtrl.inviaOTPEmail(email, otp);
-                messaggioLabel.setText("OTP inviata");
+                AlertUtils.mostraMessaggio("OTP", "Codice inviato alla email");
+                otpSection.setManaged(true);
+                otpSection.setVisible(true);
+                inviaButton.setDisable(true);
             } catch (Exception e) {
                 AlertUtils.mostraErrore("Errore", "Impossibile inviare l'email di verifica");
             }
@@ -36,13 +44,7 @@ public class SchermataAttiva2faBND {
                 SceneManager.switchTo("SchermataProfilo");
             } catch (Exception e) { AlertUtils.mostraErrore("Errore", e.getMessage()); }
         } else {
-            messaggioLabel.setText("Codice errato");
-            if (attiva2faCtrl != null) {
-                String newOtp = attiva2faCtrl.generaEOttieniOTP(email);
-                try {
-                    attiva2faCtrl.inviaOTPEmail(email, newOtp);
-                } catch (Exception e) { }
-            }
+            AlertUtils.mostraErrore("Errore", "Codice errato");
         }
     }
 }

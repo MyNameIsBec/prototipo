@@ -15,7 +15,7 @@
             </ImageView>
             <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
         </HBox>
-        <Label text="Interfacce sempre disponibili" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8; -fx-padding: 0 16 12 16; -fx-underline: true;" />
+
         <VBox spacing="0">
             <Button onAction="#handleVaiAContenuti" style="-fx-background-color: transparent; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
                 <graphic>
@@ -61,9 +61,6 @@
                     <ImageView fx:id="immagineProfilo" fitWidth="80" fitHeight="80" preserveRatio="true"
                                style="-fx-cursor: hand;" onMouseClicked="#handleModificaImmagine"
                                pickOnBounds="true" />
-                    <Label text="cambia" style="-fx-font-size: 10px; -fx-background-color: #6366f1; -fx-background-radius: 8; -fx-padding: 2 6; -fx-text-fill: white;" StackPane.alignment="BOTTOM_RIGHT">
-                        <StackPane.margin><Insets right="-4" bottom="-4"/></StackPane.margin>
-                    </Label>
                 </StackPane>
             </VBox>
 

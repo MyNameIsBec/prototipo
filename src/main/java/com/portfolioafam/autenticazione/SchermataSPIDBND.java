@@ -1,6 +1,7 @@
 package com.portfolioafam.autenticazione;
 import com.portfolioafam.model.StudenteEntity;
 import com.portfolioafam.repository.StudenteRepository;
+import com.portfolioafam.service.AuthService;
 import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.PasswordFieldUtils;
 import com.portfolioafam.util.SceneManager;
@@ -10,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.sql.SQLException;
 import java.util.Optional;
-import java.util.UUID;
 
 public class SchermataSPIDBND {
     @FXML private TextField emailField;
@@ -19,11 +19,13 @@ public class SchermataSPIDBND {
     @FXML private VBox providerBox, credenzialiBox;
     @FXML private Label providerLabel, messaggioLabel;
     private StudenteRepository studenteRepository;
+    private AuthService authService;
     private SchermataVerifica2FABND verifica2faBnd;
     private String providerSelezionato;
 
     public SchermataSPIDBND() {}
     public void setStudenteRepository(StudenteRepository r) { this.studenteRepository = r; }
+    public void setAuthService(AuthService a) { this.authService = a; }
     public void setVerifica2faBnd(SchermataVerifica2FABND b) { this.verifica2faBnd = b; }
 
     @FXML private void initialize() {
@@ -55,17 +57,30 @@ public class SchermataSPIDBND {
     @FXML
     private void handleAccedi() {
         String email = emailField.getText();
+        String password = passwordField.getText();
         if (email == null || email.isEmpty()) { AlertUtils.mostraErrore("SPID", "Inserisci l'email SPID"); return; }
         try {
             Optional<StudenteEntity> esistente = studenteRepository.findByEmail(email);
             if (esistente.isPresent()) {
-                String tempPw = UUID.randomUUID().toString().substring(0, 12) + "!Aa1";
-                StudenteEntity s = esistente.get();
-                s.setHashPassword(tempPw);
-                s.setPasswordTemporanea(true);
-                studenteRepository.save(s);
+                if (password == null || password.isEmpty()) {
+                    AlertUtils.mostraErrore("SPID", "Inserisci la password");
+                    return;
+                }
+                if (authService == null) { AlertUtils.mostraErrore("Errore", "Servizio login non disponibile"); return; }
+                StudenteEntity s = authService.loginStudente(email, password);
                 SessionManager.getInstance().avviaSessioneStudente(s);
-                SceneManager.switchTo("ModificaPasswordPrimoAccesso");
+                if (s.isPasswordTemporanea()) {
+                    SceneManager.switchTo("ModificaPasswordPrimoAccesso");
+                    return;
+                }
+                verifica2faBnd.setChiave(email);
+                verifica2faBnd.setStudenteRepository(studenteRepository);
+                verifica2faBnd.setStudente(s);
+                verifica2faBnd.setOnVerificaSuccesso(() -> {
+                    SceneManager.switchTo("SchermataProfilo");
+                });
+                verifica2faBnd.setPaginaPrecedente("SchermataAccesso");
+                SceneManager.switchTo("SchermataVerifica2FA");
             } else {
                 String nome = capitalizza(email.split("@")[0].replace(".", " "));
                 String cognome = nome.contains(" ") ? nome.substring(nome.indexOf(" ")+1) : "Rossi";
@@ -73,6 +88,8 @@ public class SchermataSPIDBND {
                 FormRegistrazioneBND.setPrefill(email, nome, cognome, "SPID (" + providerSelezionato + ")");
                 SceneManager.switchTo("FormRegistrazione");
             }
+        } catch (AuthService.AuthException e) {
+            AlertUtils.mostraErrore("SPID", "Credenziali non valide");
         } catch (SQLException e) {
             AlertUtils.mostraErrore("Errore", "Errore di connessione al database");
         }

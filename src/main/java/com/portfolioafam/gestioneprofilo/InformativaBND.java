@@ -34,7 +34,9 @@ public class InformativaBND {
 
     @FXML
     private void handleAccetta() {
-        SceneManager.switchTo("ConfermaEliminazione");
+        if (AlertUtils.mostraConferma("Conferma eliminazione", "Sei sicuro di voler eliminare il tuo account? Questa azione è irreversibile.")) {
+            SceneManager.switchTo("ConfermaEliminazione");
+        }
     }
 
     @FXML

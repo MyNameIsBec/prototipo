@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5;">
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 12 30; -fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 1 0;">
+        <Button text="✕" onAction="#handleChiudi" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 8 14; -fx-font-size: 13px; -fx-cursor: hand;" />
+        <Label fx:id="nomeContenutoBarLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <ImageView fitWidth="32" fitHeight="32" preserveRatio="true">
+            <image><Image url="@/images/logo.png" backgroundLoading="true"/></image>
+        </ImageView>
+    </HBox>
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent;">
+        <VBox alignment="TOP_CENTER" spacing="20" maxWidth="700" style="-fx-padding: 30;">
+            <Label fx:id="tipoLabel" style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;" />
+            <StackPane fx:id="previewPane" prefHeight="300" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #e0e0e0; -fx-border-radius: 8;" VBox.vgrow="ALWAYS">
+                <Label fx:id="placeholderLabel" text="Nessuna anteprima disponibile" style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;" />
+                <ImageView fx:id="imagePreview" fitWidth="600" preserveRatio="true" visible="false" />
+            </StackPane>
+            <Label fx:id="dimensioneLabel" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8;" />
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="APRI" onAction="#handleApri" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 10 30; -fx-font-size: 14px; -fx-font-weight: bold; -fx-cursor: hand;" />
+                <Button text="VALUTA" onAction="#handleValuta" style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 10 24; -fx-font-size: 13px; -fx-font-weight: bold; -fx-cursor: hand;" />
+            </HBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

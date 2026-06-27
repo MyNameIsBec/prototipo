@@ -15,7 +15,20 @@ public class StudenteRepository {
     }
 
     public Optional<StudenteEntity> findByCf(String cf) throws SQLException {
-        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea FROM studenti WHERE CF = ?";
+        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea, eliminazione, data_eliminazione FROM studenti WHERE CF = ? AND (eliminazione IS NULL OR eliminazione = FALSE)";
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, cf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapRow(rs));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<StudenteEntity> findByCfIncludingDeleted(String cf) throws SQLException {
+        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea, eliminazione, data_eliminazione FROM studenti WHERE CF = ?";
         try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
             stmt.setString(1, cf);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -28,7 +41,7 @@ public class StudenteRepository {
     }
 
     public Optional<StudenteEntity> findByEmail(String email) throws SQLException {
-        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea FROM studenti WHERE email = ?";
+        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea, eliminazione, data_eliminazione FROM studenti WHERE email = ? AND (eliminazione IS NULL OR eliminazione = FALSE)";
         try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -41,7 +54,7 @@ public class StudenteRepository {
     }
 
     public void save(StudenteEntity s) throws SQLException {
-        String sql = "INSERT INTO studenti (CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (CF) DO UPDATE SET nome = EXCLUDED.nome, cognome = EXCLUDED.cognome, email = EXCLUDED.email, hash_password = EXCLUDED.hash_password, telefono = EXCLUDED.telefono, email2fa = EXCLUDED.email2fa, immagine_profilo = EXCLUDED.immagine_profilo, dati_accademici = EXCLUDED.dati_accademici, visibilita_profilo = EXCLUDED.visibilita_profilo, password_temporanea = EXCLUDED.password_temporanea";
+        String sql = "INSERT INTO studenti (CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea, eliminazione, data_eliminazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (CF) DO UPDATE SET nome = EXCLUDED.nome, cognome = EXCLUDED.cognome, email = EXCLUDED.email, hash_password = EXCLUDED.hash_password, telefono = EXCLUDED.telefono, email2fa = EXCLUDED.email2fa, immagine_profilo = EXCLUDED.immagine_profilo, dati_accademici = EXCLUDED.dati_accademici, visibilita_profilo = EXCLUDED.visibilita_profilo, password_temporanea = EXCLUDED.password_temporanea, eliminazione = EXCLUDED.eliminazione, data_eliminazione = EXCLUDED.data_eliminazione";
         try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
             stmt.setString(1, s.getCf());
             stmt.setString(2, s.getNome());
@@ -54,16 +67,37 @@ public class StudenteRepository {
             stmt.setString(9, s.getDatiAccademici());
             stmt.setString(10, s.getVisibilitaProfilo());
             stmt.setBoolean(11, s.isPasswordTemporanea());
+            stmt.setBoolean(12, s.isEliminazione());
+            stmt.setTimestamp(13, s.getDataEliminazione());
             stmt.executeUpdate();
         }
     }
 
-    public void deleteByCf(String cf) throws SQLException {
-        String sql = "DELETE FROM studenti WHERE CF = ?";
+    public void softDeleteByCf(String cf) throws SQLException {
+        String sql = "UPDATE studenti SET eliminazione = TRUE, data_eliminazione = NOW() WHERE CF = ?";
         try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
             stmt.setString(1, cf);
             stmt.executeUpdate();
         }
+    }
+
+    public void ripristinaByCf(String cf) throws SQLException {
+        String sql = "UPDATE studenti SET eliminazione = FALSE, data_eliminazione = NULL WHERE CF = ?";
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, cf);
+            stmt.executeUpdate();
+        }
+    }
+
+    public Optional<StudenteEntity> findDeletedByCf(String cf) throws SQLException {
+        String sql = "SELECT CF, nome, cognome, email, hash_password, telefono, email2fa, immagine_profilo, dati_accademici, visibilita_profilo, password_temporanea, eliminazione, data_eliminazione FROM studenti WHERE CF = ? AND eliminazione = TRUE";
+        try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, cf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) return Optional.of(mapRow(rs));
+            }
+        }
+        return Optional.empty();
     }
 
     public List<StudenteEntity> findByVisibilita(String visibilita) throws SQLException {
@@ -100,15 +134,16 @@ public class StudenteRepository {
         if (nome == null || nome.trim().isEmpty()) return new ArrayList<>();
         String[] tokens = nome.trim().split("\\s+");
         StringBuilder sql = new StringBuilder(
-            "SELECT CF, nome, cognome, dati_accademici FROM studenti WHERE visibilita_profilo = 'PUBBLICO'");
+            "SELECT CF, nome, cognome, dati_accademici FROM studenti WHERE visibilita_profilo = 'PUBBLICO' AND (eliminazione IS NULL OR eliminazione = FALSE)");
         for (int i = 0; i < tokens.length; i++) {
-            sql.append(" AND nome ILIKE ?");
+            sql.append(" AND (nome ILIKE ? OR cognome ILIKE ?)");
         }
         List<StudenteEntity> list = new ArrayList<>();
         try (PreparedStatement stmt = dbManager.getConnection().prepareStatement(sql.toString())) {
             int idx = 1;
             for (String t : tokens) {
                 String p = "%" + t + "%";
+                stmt.setString(idx++, p);
                 stmt.setString(idx++, p);
             }
             try (ResultSet rs = stmt.executeQuery()) {
@@ -156,10 +191,10 @@ public class StudenteRepository {
         String[] tokens = (nome != null) ? nome.trim().split("\\s+") : new String[0];
         boolean hasNome = tokens.length > 0 && !tokens[0].isEmpty();
         StringBuilder sql = new StringBuilder(
-            "SELECT CF, nome, cognome, dati_accademici FROM studenti WHERE visibilita_profilo = 'PUBBLICO'");
+            "SELECT CF, nome, cognome, dati_accademici FROM studenti WHERE visibilita_profilo = 'PUBBLICO' AND (eliminazione IS NULL OR eliminazione = FALSE)");
         if (hasNome) {
             for (int i = 0; i < tokens.length; i++) {
-                sql.append(" AND nome ILIKE ?");
+                sql.append(" AND (nome ILIKE ? OR cognome ILIKE ?)");
             }
         }
         if (corso != null && !corso.trim().isEmpty()) {
@@ -177,6 +212,7 @@ public class StudenteRepository {
             if (hasNome) {
                 for (String t : tokens) {
                     String p = "%" + t + "%";
+                    stmt.setString(idx++, p);
                     stmt.setString(idx++, p);
                 }
             }
@@ -248,6 +284,8 @@ public class StudenteRepository {
         s.setDatiAccademici(rs.getString("dati_accademici"));
         s.setVisibilitaProfilo(rs.getString("visibilita_profilo"));
         s.setPasswordTemporanea(rs.getBoolean("password_temporanea"));
+        try { s.setEliminazione(rs.getBoolean("eliminazione")); } catch (SQLException e) { }
+        try { s.setDataEliminazione(rs.getTimestamp("data_eliminazione")); } catch (SQLException e) { }
         return s;
     }
 }

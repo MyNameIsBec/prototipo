@@ -5,12 +5,10 @@ import com.portfolioafam.util.SceneManager;
 import com.portfolioafam.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
 import java.sql.SQLException;
 import java.util.List;
 public class SchermataCondivisioniBND {
     @FXML private TableView<LinkEntity> linksTable;
-    @FXML private FlowPane contenutiCondivisionePane;
     private CondivisioniCTRL condivisioniCtrl;
     private GeneraLinkPortfolioCTRL generaLinkPortfolioCtrl;
     private RevocaLinkCTRL revocaLinkCtrl;

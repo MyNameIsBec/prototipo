@@ -34,6 +34,8 @@ public class DatabaseManager {
     private void runMigrations() {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute("ALTER TABLE studenti ADD COLUMN IF NOT EXISTS password_temporanea BOOLEAN NOT NULL DEFAULT FALSE");
+            stmt.execute("ALTER TABLE studenti ADD COLUMN IF NOT EXISTS eliminazione BOOLEAN NOT NULL DEFAULT FALSE");
+            stmt.execute("ALTER TABLE studenti ADD COLUMN IF NOT EXISTS data_eliminazione TIMESTAMP");
         } catch (SQLException e) {
             System.err.println("[DB] Migration skipped: " + e.getMessage());
         }

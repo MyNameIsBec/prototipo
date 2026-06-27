@@ -22,7 +22,6 @@ public class SchermataProfiloStudenteBND {
 
     private static String cfToLoad, nomeToLoad, cognomeToLoad, datiAccToLoad;
     private static String currentCf, currentNome, currentCognome, currentDatiAcc;
-    private static Long pendingContenutoIdForVoto;
     private static Long pendingContenutoIdForDownload;
 
     private String cf, nome, cognome, datiAcc;
@@ -140,18 +139,14 @@ public class SchermataProfiloStudenteBND {
         Label tipoLabel = new Label(c.getTipo() != null ? c.getTipo() : "");
         tipoLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #94a3b8;");
         card.getChildren().add(tipoLabel);
-        HBox actions = new HBox(5);
-        Button scarica = new Button("\u2B07");
-        scarica.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 4 8; -fx-font-size: 12px; -fx-cursor: hand;");
-        scarica.setOnAction(e -> { e.consume(); scaricaContenuto(c); });
-        Button segnala = new Button("!");
-        segnala.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 4 8; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand;");
-        segnala.setOnAction(e -> { e.consume(); segnalaContenuto(c); });
-        Button valuta = new Button("\u2605");
-        valuta.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white; -fx-background-radius: 4; -fx-padding: 4 8; -fx-font-size: 12px; -fx-cursor: hand;");
-        valuta.setOnAction(e -> { e.consume(); valutaContenuto(c); });
-        actions.getChildren().addAll(scarica, segnala, valuta);
-        card.getChildren().add(actions);
+        MenuButton menu = new MenuButton("\u22EE");
+        menu.setStyle("-fx-background-color: transparent; -fx-font-size: 18px; -fx-cursor: hand;");
+        MenuItem scarica = new MenuItem("Scarica");
+        scarica.setOnAction(e -> scaricaContenuto(c));
+        MenuItem segnala = new MenuItem("Segnala");
+        segnala.setOnAction(e -> segnalaContenuto(c));
+        menu.getItems().addAll(scarica, segnala);
+        card.getChildren().add(menu);
         return card;
     }
 
@@ -189,30 +184,6 @@ public class SchermataProfiloStudenteBND {
         SceneManager.switchToFresh("InviaSegnalazione");
     }
 
-    private void valutaContenuto(ContenutoEntity c) {
-        if (SessionManager.getInstance().getUtenteEsternoId() == null) {
-            pendingContenutoIdForVoto = c.getIdContenuto();
-            SceneManager.switchTo("SchermataIdentificazione");
-            return;
-        }
-        TextInputDialog d = new TextInputDialog("5");
-        d.setTitle("Valuta contenuto");
-        d.setHeaderText("Valuta: " + c.getNome());
-        d.setContentText("Voto (1-10):");
-        d.showAndWait().ifPresent(v -> {
-            try {
-                int voto = Integer.parseInt(v);
-                if (voto < 1 || voto > 10) {
-                    AlertUtils.mostraErrore("Errore", "Il voto deve essere tra 1 e 10");
-                    return;
-                }
-                AlertUtils.mostraMessaggio("Valutazione", "Valutazione registrata: " + voto);
-            } catch (NumberFormatException ex) {
-                AlertUtils.mostraErrore("Errore", "Inserisci un numero valido");
-            }
-        });
-    }
-
     public static void eseguiPendingDownload(Long idContenuto) {
         pendingContenutoIdForDownload = idContenuto;
     }
@@ -220,12 +191,6 @@ public class SchermataProfiloStudenteBND {
     public static Long getPendingDownloadId() {
         Long id = pendingContenutoIdForDownload;
         pendingContenutoIdForDownload = null;
-        return id;
-    }
-
-    public static Long getPendingVotoId() {
-        Long id = pendingContenutoIdForVoto;
-        pendingContenutoIdForVoto = null;
         return id;
     }
 

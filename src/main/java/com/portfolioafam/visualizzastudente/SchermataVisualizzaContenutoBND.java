@@ -71,29 +71,6 @@ public class SchermataVisualizzaContenutoBND {
         }
     }
 
-    @FXML private void handleScarica() {
-        if (SessionManager.getInstance().getUtenteEsternoId() == null) {
-            AlertUtils.mostraErrore("Scarica", "Devi prima identificarti (pulsante IDENTIFICAZIONE)");
-            return;
-        }
-        byte[] data = contenuto.getFileDati();
-        if (data == null || data.length == 0) {
-            AlertUtils.mostraErrore("Scarica", "File non disponibile");
-            return;
-        }
-        try {
-            FileChooser fc = new FileChooser();
-            fc.setInitialFileName(contenuto.getNome());
-            File f = fc.showSaveDialog(null);
-            if (f != null) {
-                Files.write(f.toPath(), data);
-                AlertUtils.mostraMessaggio("Scarica", "File salvato: " + f.getName());
-            }
-        } catch (Exception e) {
-            AlertUtils.mostraErrore("Scarica", e.getMessage());
-        }
-    }
-
     @FXML private void handleValuta() {
         if (SessionManager.getInstance().getUtenteEsternoId() == null) {
             AlertUtils.mostraErrore("Valuta", "Devi prima identificarti");
@@ -112,11 +89,6 @@ public class SchermataVisualizzaContenutoBND {
                 AlertUtils.mostraErrore("Errore", "Inserisci un numero valido");
             }
         });
-    }
-
-    @FXML private void handleSegnala() {
-        InviaSegnalazioneBND.preload(contenuto.getNome(), SessionManager.getInstance().getUtenteEsternoId(), contenuto.getIdContenuto());
-        SceneManager.switchToFresh("InviaSegnalazione");
     }
 
     @FXML private void handleChiudi() {

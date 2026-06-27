@@ -16,7 +16,7 @@
             </ImageView>
             <Label text="Portfolio AFAM" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
         </HBox>
-        <Label text="Interfacce sempre disponibili" style="-fx-font-size: 10px; -fx-text-fill: #94a3b8; -fx-padding: 0 16 12 16; -fx-underline: true;" />
+
         <VBox spacing="0">
             <Button onAction="#handleVaiAProfilo" style="-fx-background-color: transparent; -fx-padding: 12 16; -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-background-radius: 0;">
                 <graphic><HBox spacing="11" alignment="CENTER_LEFT">
@@ -64,16 +64,5 @@
                 <TableColumn text="Valutazione" prefWidth="100" />
             </columns>
         </TableView>
-
-        <!-- Seleziona contenuti da condividere -->
-        <Label text="Seleziona i contenuti da condividere" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 16 0 0 0;" />
-        <Label text="Clicca i contenuti per selezionarli" style="-fx-font-size: 12px; -fx-text-fill: #94a3b8; -fx-font-style: italic;" />
-        <ScrollPane fitToWidth="true" VBox.vgrow="NEVER" prefHeight="200" style="-fx-background: transparent; -fx-background-color: transparent;">
-            <FlowPane fx:id="contenutiCondivisionePane" hgap="14" vgap="14" alignment="TOP_CENTER" />
-        </ScrollPane>
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-            <padding><Insets top="8" /></padding>
-            <Button text="Genera link" onAction="#handleGeneraLink" style="-fx-font-size: 12px; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-radius: 4; -fx-padding: 6 12;" />
-        </HBox>
     </VBox>
 </HBox>

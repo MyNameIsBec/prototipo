@@ -15,7 +15,7 @@
     </HBox>
     <VBox spacing="12" style="-fx-padding: 20 30;" maxWidth="700">
         <HBox spacing="8" alignment="CENTER">
-            <TextField fx:id="ricercaField" promptText="Cerca studente per nome..." HBox.hgrow="ALWAYS" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-width: 1;" onAction="#handleCerca" />
+            <TextField fx:id="ricercaField" promptText="Cerca per nome" HBox.hgrow="ALWAYS" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-width: 1;" onAction="#handleCerca" />
             <Button text="Cerca" onAction="#handleCerca" style="-fx-padding: 10 20; -fx-background-radius: 6; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
             <Button fx:id="filtraButton" text="Filtra" onAction="#handleToggleFiltri" style="-fx-padding: 10 16; -fx-background-radius: 6; -fx-background-color: #6366f1; -fx-text-fill: white; -fx-font-weight: bold;" />
         </HBox>

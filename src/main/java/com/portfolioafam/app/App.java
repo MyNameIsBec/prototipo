@@ -114,12 +114,14 @@ public class App extends Application {
                 reg("SchermataSPID", () -> {
             SchermataSPIDBND b = new SchermataSPIDBND();
             b.setStudenteRepository(studenteRepository);
+            b.setAuthService(authService);
             b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(SchermataSPIDBND.class, b);
         });
                 reg("SchermataEIDAS", () -> {
             SchermataEIDASBND b = new SchermataEIDASBND();
             b.setStudenteRepository(studenteRepository);
+            b.setAuthService(authService);
             b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(SchermataEIDASBND.class, b);
         });
@@ -189,19 +191,21 @@ public class App extends Application {
             return loadFxml(ModificaDatiAccademiciBND.class, b);
         });
 
+        EliminaAccountCTRL eliminaAccountCtrl = new EliminaAccountCTRL(studenteRepository, emailService);
         reg("ConfermaEliminazione", () -> {
             ConfermaEliminazioneBND b = new ConfermaEliminazioneBND();
-            b.setEliminaAccountCtrl(new EliminaAccountCTRL(studenteRepository));
+            b.setEliminaAccountCtrl(eliminaAccountCtrl);
+            b.setVerifica2faBnd(verifica2faBnd);
             return loadFxml(ConfermaEliminazioneBND.class, b);
         });
         reg("Informativa", () -> {
             InformativaBND b = new InformativaBND();
-            b.setEliminaAccountCtrl(new EliminaAccountCTRL(studenteRepository));
+            b.setEliminaAccountCtrl(eliminaAccountCtrl);
             return loadFxml(InformativaBND.class, b);
         });
         reg("RecuperaAccount", () -> {
             RecuperaAccountBND b = new RecuperaAccountBND();
-            b.setRecuperaAccountCtrl(new RecuperaAccountCTRL(studenteRepository));
+            b.setEliminaAccountCtrl(eliminaAccountCtrl);
             return loadFxml(RecuperaAccountBND.class, b);
         });
 
@@ -240,6 +244,11 @@ public class App extends Application {
                     new GeneraLinkPortfolioCTRL(linkRepository),
                     new RevocaLinkCTRL(linkRepository));
             return loadFxml(SchermataCondivisioniBND.class, b);
+        });
+        reg("FormScadenzaLink", () -> {
+            FormScadenzaLinkBND b = new FormScadenzaLinkBND();
+            b.setGeneraLinkPortfolioCtrl(new GeneraLinkPortfolioCTRL(linkRepository));
+            return loadFxml(FormScadenzaLinkBND.class, b);
         });
         reg("PopupCondivisione", () -> loadFxml(PopupCondivisioneBND.class, new PopupCondivisioneBND()));
 

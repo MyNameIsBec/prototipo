@@ -9,6 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import java.io.*;
 import java.nio.file.Files;
@@ -67,9 +71,23 @@ public class ProfiloBND {
         try {
             if (s.getImmagineProfilo() != null) {
                 immagineProfilo.setImage(new Image(new ByteArrayInputStream(s.getImmagineProfilo())));
+            } else {
+                mostraPlaceholder(s.getNome(), s.getCognome());
             }
         } catch (Exception e) {
+            mostraPlaceholder(s.getNome(), s.getCognome());
         }
+    }
+
+    private void mostraPlaceholder(String nome, String cognome) {
+        Circle cerchio = new Circle(40, Color.web("#6366f1"));
+        Text iniziali = new Text((nome != null && !nome.isEmpty() ? nome.charAt(0) + "" : "") +
+                (cognome != null && !cognome.isEmpty() ? cognome.charAt(0) + "" : "?"));
+        iniziali.setFill(Color.WHITE);
+        iniziali.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
+        StackPane padre = (StackPane) immagineProfilo.getParent();
+        padre.getChildren().add(0, new StackPane(cerchio, iniziali));
+        immagineProfilo.setVisible(false);
     }
 
     @FXML

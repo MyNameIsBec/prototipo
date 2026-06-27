@@ -1,6 +1,6 @@
 package com.portfolioafam.model;
 
-import java.util.Arrays;
+import java.sql.Timestamp;
 
 public class StudenteEntity {
 
@@ -15,6 +15,8 @@ public class StudenteEntity {
     private String datiAccademici;
     private String visibilitaProfilo;
     private boolean passwordTemporanea;
+    private boolean eliminazione;
+    private Timestamp dataEliminazione;
 
     public StudenteEntity() {
     }
@@ -61,6 +63,10 @@ public class StudenteEntity {
     public void setVisibilitaProfilo(String visibilitaProfilo) { this.visibilitaProfilo = visibilitaProfilo; }
     public boolean isPasswordTemporanea() { return passwordTemporanea; }
     public void setPasswordTemporanea(boolean passwordTemporanea) { this.passwordTemporanea = passwordTemporanea; }
+    public boolean isEliminazione() { return eliminazione; }
+    public void setEliminazione(boolean eliminazione) { this.eliminazione = eliminazione; }
+    public Timestamp getDataEliminazione() { return dataEliminazione; }
+    public void setDataEliminazione(Timestamp dataEliminazione) { this.dataEliminazione = dataEliminazione; }
 
     @Override
     public String toString() {

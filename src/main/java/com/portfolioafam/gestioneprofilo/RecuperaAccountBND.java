@@ -2,6 +2,7 @@ package com.portfolioafam.gestioneprofilo;
 
 import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.SceneManager;
+import com.portfolioafam.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -10,13 +11,13 @@ public class RecuperaAccountBND {
     @FXML private TextField cfField;
     @FXML private TextField emailField;
 
-    private RecuperaAccountCTRL recuperaAccountCtrl;
+    private EliminaAccountCTRL eliminaAccountCtrl;
 
     public RecuperaAccountBND() {
     }
 
-    public void setRecuperaAccountCtrl(RecuperaAccountCTRL ctrl) {
-        this.recuperaAccountCtrl = ctrl;
+    public void setEliminaAccountCtrl(EliminaAccountCTRL ctrl) {
+        this.eliminaAccountCtrl = ctrl;
     }
 
     @FXML
@@ -30,13 +31,16 @@ public class RecuperaAccountBND {
         }
 
         try {
-            if (recuperaAccountCtrl != null) {
-                recuperaAccountCtrl.verificaDati(cf, email);
+            if (eliminaAccountCtrl != null) {
+                if (!eliminaAccountCtrl.checkAccountEliminato(cf)) {
+                    AlertUtils.mostraErrore("Errore", "Account non trovato o non eliminato");
+                    return;
+                }
                 if (AlertUtils.mostraConferma("Recupero account",
-                        "Vuoi recuperare il tuo account?")) {
-                    recuperaAccountCtrl.recuperaAccount(cf);
+                        "Procedendo accetti il trattamento dei dati personali secondo l'informativa GDPR.\nVuoi recuperare il tuo account?")) {
+                    eliminaAccountCtrl.ripristinaAccount(cf);
                     AlertUtils.mostraMessaggio("Recupero account", "Recupero account riuscito");
-                    SceneManager.switchTo("HomePage");
+                    SceneManager.switchTo("SchermataProfilo");
                 }
             }
         } catch (Exception e) {

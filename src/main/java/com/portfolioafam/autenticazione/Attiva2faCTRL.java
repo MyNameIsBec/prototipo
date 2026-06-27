@@ -33,13 +33,9 @@ public class Attiva2faCTRL {
     }
 
     public void salvaEmail2FA(String cf, String email2fa) throws SQLException {
-        studenteRepository.findByCf(cf).ifPresent(s -> {
-            s.setEmail2fa(email2fa);
-            try {
-                studenteRepository.save(s);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        StudenteEntity s = studenteRepository.findByCf(cf)
+                .orElseThrow(() -> new SQLException("Studente non trovato per salvataggio email 2FA"));
+        s.setEmail2fa(email2fa);
+        studenteRepository.save(s);
     }
 }

@@ -22,6 +22,8 @@
             <Label fx:id="providerLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
             <Label text="Email" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
             <TextField fx:id="emailField" promptText="nome@provider-eidas.eu" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="Infinity" />
+            <Label text="Password" style="-fx-font-size: 13px; -fx-text-fill: #555; -fx-font-weight: bold;" />
+            <PasswordField fx:id="passwordField" promptText="Inserisci la password" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-color: #ddd; -fx-border-radius: 6;" maxWidth="Infinity" />
 
             <HBox spacing="10" alignment="CENTER_RIGHT">
                 <padding><Insets top="18" /></padding>

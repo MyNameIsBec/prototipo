@@ -3,6 +3,7 @@ import com.portfolioafam.model.StudenteEntity;
 import com.portfolioafam.util.AlertUtils;
 import com.portfolioafam.util.PasswordFieldUtils;
 import com.portfolioafam.util.SceneManager;
+import com.portfolioafam.util.SessionManager;
 import com.portfolioafam.util.ValidationUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -30,6 +31,7 @@ public class FormPasswordBND {
             if (studentePending != null) {
                 studentePending.setHashPassword(pw);
                 registrazioneCtrl.registra(studentePending);
+                SessionManager.getInstance().avviaSessioneStudente(studentePending);
                 SceneManager.switchTo("SchermataAttiva2fa");
             }
         } catch (Exception e) { AlertUtils.mostraErrore("Errore", e.getMessage()); }
