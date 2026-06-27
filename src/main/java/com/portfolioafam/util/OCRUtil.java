@@ -37,20 +37,6 @@ public class OCRUtil {
     private OCRUtil() {
     }
 
-    public static String estraiTesto(byte[] dati) throws IOException, TesseractException {
-        if (isPdf(dati)) {
-            return ocrPdf(dati);
-        }
-        String ext = guessExtension(dati);
-        File temp = File.createTempFile("ocr_", ext);
-        try {
-            Files.write(temp.toPath(), dati);
-            return tesseract.doOCR(temp);
-        } finally {
-            temp.delete();
-        }
-    }
-
     public static boolean verificaDatiTessera(byte[] imageData, String cfAtteso, String nomeAtteso, String cognomeAtteso) throws IOException, TesseractException {
         String testo = estraiTesto(imageData).toUpperCase();
         boolean cfOK = cfAtteso != null && testo.contains(cfAtteso.toUpperCase());
@@ -77,9 +63,35 @@ public class OCRUtil {
             Files.write(temp.toPath(), dati);
             try (PDDocument doc = Loader.loadPDF(temp)) {
                 PDFRenderer renderer = new PDFRenderer(doc);
-                BufferedImage img = renderer.renderImageWithDPI(0, 300);
-                return tesseract.doOCR(img);
+                BufferedImage img = renderer.renderImageWithDPI(0, 400);
+                String testo = tesseract.doOCR(img);
+                if (testo.trim().isEmpty()) {
+                    tesseract.setLanguage("eng");
+                    testo = tesseract.doOCR(img);
+                    tesseract.setLanguage("ita");
+                }
+                return testo;
             }
+        } finally {
+            temp.delete();
+        }
+    }
+
+    public static String estraiTesto(byte[] dati) throws IOException, TesseractException {
+        if (isPdf(dati)) {
+            return ocrPdf(dati);
+        }
+        String ext = guessExtension(dati);
+        File temp = File.createTempFile("ocr_", ext);
+        try {
+            Files.write(temp.toPath(), dati);
+            String testo = tesseract.doOCR(temp);
+            if (testo.trim().isEmpty()) {
+                tesseract.setLanguage("eng");
+                testo = tesseract.doOCR(temp);
+                tesseract.setLanguage("ita");
+            }
+            return testo;
         } finally {
             temp.delete();
         }

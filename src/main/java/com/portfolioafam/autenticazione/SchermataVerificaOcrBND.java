@@ -69,12 +69,38 @@ public class SchermataVerificaOcrBND {
             String testoFronte = verificaOcrCtrl.estraiTesto(fronteData);
             String testoRetro = retroData != null ? verificaOcrCtrl.estraiTesto(retroData) : "";
             String testoCompleto = (testoFronte + " " + testoRetro).toUpperCase();
-            String cf = studentePending.getCf().toUpperCase();
-            String nome = studentePending.getNome().toUpperCase();
-            String cognome = studentePending.getCognome().toUpperCase();
-            boolean cfOK = testoCompleto.contains(cf);
-            boolean nomeOK = testoCompleto.contains(nome);
-            boolean cognomeOK = testoCompleto.contains(cognome);
+            String crudo = testoCompleto.replaceAll("[^A-Z0-9\\s]", "").replaceAll("\\s+", " ");
+            String cf = studentePending.getCf().toUpperCase().replaceAll("[^A-Z0-9]", "");
+            String nome = studentePending.getNome().toUpperCase().replaceAll("[^A-Z\\s]", "").trim();
+            String cognome = studentePending.getCognome().toUpperCase().replaceAll("[^A-Z\\s]", "").trim();
+            boolean cfOK = crudo.contains(cf);
+            if (!cfOK && cf.length() == 16) {
+                for (int i = 0; i < cf.length(); i++) {
+                    char c = cf.charAt(i);
+                    if (!Character.isLetterOrDigit(c)) break;
+                }
+                for (String parola : crudo.split("\\s+")) {
+                    String p = parola.replaceAll("[^A-Z0-9]", "");
+                    if (p.equals(cf)) { cfOK = true; break; }
+                    if (p.length() >= 14 && p.contains(cf.substring(0, 10))) { cfOK = true; break; }
+                }
+            }
+            boolean nomeOK = crudo.contains(nome);
+            boolean cognomeOK = crudo.contains(cognome);
+            if (!nomeOK && nome.length() > 2) {
+                for (String parola : crudo.split("\\s+")) {
+                    String p = parola.replaceAll("[^A-Z]", "");
+                    if (p.equals(nome)) { nomeOK = true; break; }
+                    if (p.length() >= 3 && nome.startsWith(p)) { nomeOK = true; break; }
+                }
+            }
+            if (!cognomeOK && cognome.length() > 2) {
+                for (String parola : crudo.split("\\s+")) {
+                    String p = parola.replaceAll("[^A-Z]", "");
+                    if (p.equals(cognome)) { cognomeOK = true; break; }
+                    if (p.length() >= 3 && cognome.startsWith(p)) { cognomeOK = true; break; }
+                }
+            }
             if (cfOK && nomeOK && cognomeOK) {
                 statoLabel.setText("");
                 AlertUtils.mostraMessaggio("Verifica OCR", "Verifica riuscita");
@@ -86,7 +112,7 @@ public class SchermataVerificaOcrBND {
                 dettagli.append("CF \"" + cf + "\" " + (cfOK ? "OK" : "NON TROVATO") + "\n");
                 dettagli.append("Nome \"" + nome + "\" " + (nomeOK ? "OK" : "NON TROVATO") + "\n");
                 dettagli.append("Cognome \"" + cognome + "\" " + (cognomeOK ? "OK" : "NON TROVATO"));
-                statoLabel.setText("Verifica fallita: i dati non corrispondono");
+                statoLabel.setText("Verifica fallita: i dati non corrispondono (" + testoCompleto.length() + " caratteri letti)");
                 statoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #ef4444;");
                 AlertUtils.mostraErrore("Verifica OCR", dettagli.toString());
             }
