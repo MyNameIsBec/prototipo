@@ -2,11 +2,9 @@ package com.portfolioafam.util;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.nio.file.Files;
 
 public class OCRUtil {
 
@@ -22,6 +20,10 @@ public class OCRUtil {
             tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
         } else if (new File("C:/Program Files (x86)/Tesseract-OCR/tessdata").exists()) {
             tesseract.setDatapath("C:/Program Files (x86)/Tesseract-OCR/tessdata");
+        } else if (new File("C:/ProgramData/Tesseract-OCR/tessdata").exists()) {
+            tesseract.setDatapath("C:/ProgramData/Tesseract-OCR/tessdata");
+        } else if (new File(System.getenv("LOCALAPPDATA") + "/Tesseract-OCR/tessdata").exists()) {
+            tesseract.setDatapath(System.getenv("LOCALAPPDATA") + "/Tesseract-OCR/tessdata");
         }
         tesseract.setLanguage("ita");
     }
@@ -30,11 +32,13 @@ public class OCRUtil {
     }
 
     public static String estraiTesto(byte[] imageData) throws IOException, TesseractException {
-        BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageData));
-        if (img == null) {
-            throw new IOException("Impossibile leggere l'immagine");
+        File temp = File.createTempFile("ocr_", ".png");
+        try {
+            Files.write(temp.toPath(), imageData);
+            return tesseract.doOCR(temp);
+        } finally {
+            temp.delete();
         }
-        return tesseract.doOCR(img);
     }
 
     public static boolean verificaDatiTessera(byte[] imageData, String cfAtteso, String nomeAtteso, String cognomeAtteso) throws IOException, TesseractException {
